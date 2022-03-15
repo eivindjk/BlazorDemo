@@ -1,0 +1,12 @@
+﻿@page "/js"
+@inject IJSRuntime _js
+
+<h3>JsInvoke</h3>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        string name = await _js.InvokeAsync<string>("prompt", "What is your name?");
+        await _js.InvokeVoidAsync("alert", $"Hello {name}!");
+    }
+}

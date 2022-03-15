@@ -1,0 +1,25 @@
+﻿<div class="card" style="background-color: @Color">
+    <div class="header">
+        @Header
+    </div>
+    <div class="image">
+        @Image
+    </div>
+    <div class="footer">
+        @Footer
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment Header { get; set; }
+
+    [Parameter]
+    public RenderFragment Image { get; set; }
+
+    [Parameter]
+    public RenderFragment Footer { get; set; }
+
+    [CascadingParameter]
+    public string Color { get; set; }
+}

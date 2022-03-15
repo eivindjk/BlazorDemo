@@ -1,0 +1,49 @@
+﻿@using BlazorDemo.Services
+
+<EditForm Model="_climbingRouteModel" OnValidSubmit="@OnSubmitHandler">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="name">Name</label>
+        <InputText @bind-Value="_climbingRouteModel.Name"
+                   id="name"/>
+        <ValidationMessage For="() => _climbingRouteModel.Name"/>
+    </div>
+    <div class="form-group">
+        <label for="description">Description</label>
+        <InputText @bind-Value="_climbingRouteModel.Description"
+                   id="description"/>
+    </div>
+    <div class="form-group">
+        <label for="grade">Grade</label>
+        <InputText @bind-Value="_climbingRouteModel.Grade"
+                   id="grade"/>
+    </div>
+    <div class="form-group">
+        <label for="image">Image</label>
+        <InputFile OnChange="@OnFileSelection"
+                   id="image"/>
+    </div>
+    <button type="submit">Submit</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public EventCallback<ClimbingRouteModel> AddRouteCallback { get; set; }
+
+    private ClimbingRouteModel _climbingRouteModel = new();
+
+    private async Task OnFileSelection(InputFileChangeEventArgs e)
+    {
+        IBrowserFile imgFile = e.File;
+        var buffers = new byte[imgFile.Size];
+        await imgFile.OpenReadStream().ReadAsync(buffers);
+        var imageType = imgFile.ContentType;
+        _climbingRouteModel.Image = $"data:{imageType};base64,{Convert.ToBase64String(buffers)}";
+    }
+
+    private Task OnSubmitHandler()
+    {
+        return AddRouteCallback.InvokeAsync(_climbingRouteModel);
+    }
+
+}

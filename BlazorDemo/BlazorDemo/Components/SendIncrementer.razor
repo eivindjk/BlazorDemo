@@ -1,0 +1,15 @@
+﻿<button @onclick="ButtonClickHandler">Add send</button>
+
+@code {
+    [Parameter]
+    public int Send { get; set; }
+
+    [Parameter]
+    public EventCallback<int> SendChanged { get; set; }
+
+    private Task ButtonClickHandler()
+    {
+        Send++;
+        return SendChanged.InvokeAsync(Send);
+    }
+}

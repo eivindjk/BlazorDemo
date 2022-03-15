@@ -1,0 +1,50 @@
+﻿@page "/climbing"
+@using BlazorDemo.Services
+@using BlazorDemo.Components
+
+@inject IClimbingRouteService _climbingRouteService
+
+<h3>Climbing</h3>
+
+@if (_isAddingRoute)
+{
+    <ClimbingRouteForm AddRouteCallback="AddRouteHandler"/>
+}
+else
+{
+    <button @onclick="@(() => _isAddingRoute = true)">Add</button>
+}
+
+<CascadingValue Value="color">
+    @if (_routes != null)
+    {
+        <div class="card-container">
+            @foreach (var route in _routes)
+            {
+                <ClimbingRoute Route="route" OnRouteDeletedCallback="OnRoutDeletedHandler"/>
+            }
+        </div>
+    }
+</CascadingValue>
+
+@code {
+    private List<ClimbingRouteModel> _routes;
+    private string color = "#BBBBBB";
+    private bool _isAddingRoute = false;
+
+    protected override void OnInitialized()
+    {
+        _routes = _climbingRouteService.GetAll();
+    }
+
+    private void OnRoutDeletedHandler(ClimbingRouteModel route)
+    {
+        _routes.Remove(route);
+    }
+
+    private void AddRouteHandler(ClimbingRouteModel route)
+    {
+        _routes.Add(route);
+        _isAddingRoute = false;
+    }
+}

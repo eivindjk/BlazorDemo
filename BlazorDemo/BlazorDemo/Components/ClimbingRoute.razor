@@ -1,0 +1,31 @@
+﻿@using BlazorDemo.Services
+
+<CardLayout>
+    <Header>
+        <h3>@Route.Name</h3>
+        <SendIncrementer @bind-Send="@Route.SendCounter"/>
+    </Header>
+    <Image>
+        <img src="@Route.Image"/>
+    </Image>
+    <Footer>
+        <p>@Route.Description</p>
+        <p><strong>Grade:</strong> @Route.Grade</p>
+        <p><strong>Sends:</strong> @Route.SendCounter</p>
+        <button @onclick="OnDeleteClickHandler">Delete</button>
+    </Footer>
+</CardLayout>
+
+@code {
+    [Parameter]
+    public ClimbingRouteModel Route { get; set; }
+
+    [Parameter]
+    public EventCallback<ClimbingRouteModel> OnRouteDeletedCallback { get; set; }
+
+    private Task OnDeleteClickHandler()
+    {
+        return OnRouteDeletedCallback.InvokeAsync(Route);
+    }
+
+}
